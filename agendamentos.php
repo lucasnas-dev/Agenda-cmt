@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$escalas = $pdo->query('SELECT e.id, e.data_escala, e.turno, m.nome AS medico_nome, m.especialidade, e.local_consultorio FROM escalas e INNER JOIN medicos m ON m.id = e.medico_id ORDER BY e.data_escala DESC')->fetchAll();
+$escalas = $pdo->query('SELECT e.id, e.data_escala, e.turno, m.nome AS medico_nome, m.contrato AS medico_contrato, e.local_consultorio FROM escalas e INNER JOIN medicos m ON m.id = e.medico_id ORDER BY e.data_escala DESC')->fetchAll();
 $agendamentos = $pdo->query('SELECT a.id, p.nome_completo, p.idade, p.documento, a.observacoes, e.data_escala, e.turno, m.nome AS medico_nome FROM agendamentos a INNER JOIN pacientes p ON a.paciente_id = p.id INNER JOIN escalas e ON a.escala_id = e.id INNER JOIN medicos m ON e.medico_id = m.id ORDER BY e.data_escala DESC, p.nome_completo')->fetchAll();
 ?>
 <!doctype html>
@@ -89,7 +89,7 @@ $agendamentos = $pdo->query('SELECT a.id, p.nome_completo, p.idade, p.documento,
                 <select class="form-select" name="escala_id" required>
                     <option value="">Selecione a escala</option>
                     <?php foreach ($escalas as $escala): ?>
-                        <option value="<?= (int) $escala['id'] ?>"><?= htmlspecialchars($escala['data_escala']) ?> | <?= htmlspecialchars($escala['turno']) ?> | Dr(a). <?= htmlspecialchars($escala['medico_nome']) ?> - <?= htmlspecialchars($escala['local_consultorio']) ?></option>
+                        <option value="<?= (int) $escala['id'] ?>"><?= htmlspecialchars($escala['data_escala']) ?> | <?= htmlspecialchars($escala['turno']) ?> | Dr(a). <?= htmlspecialchars($escala['medico_nome']) ?> (<?= htmlspecialchars($escala['medico_contrato']) ?>) - <?= htmlspecialchars($escala['local_consultorio']) ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
